@@ -1,0 +1,33 @@
+version: "3.4"
+
+services:
+  app:
+    image: monicahq/monicahq
+    depends_on:
+      - db
+    ports:
+      - 8080:80
+    environment:
+      # generate with `pwgen -s 32 1` for instance:
+      - APP_KEY=2zmTNudxmN7LDAC1dy09rmoRxyF5W7xy
+      - DB_HOST=db
+    volumes:
+      - data:/var/www/monica/storage
+    restart: always
+
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_DATABASE=monica
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=secret
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: always
+
+volumes:
+  data:
+    name: data
+  mysql:
+    name: mysql
